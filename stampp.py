@@ -94,6 +94,7 @@ class GajimClient:
     """
     set gajim's new status message
     """
+    # TODO: handle exit code
     subprocess.call([self.binName, "change_status", self.getStatus(), newMsg])
 
 class XMPPClient:
