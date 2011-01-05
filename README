@@ -8,3 +8,4 @@ For now, enter the use name you want to fetch statuses from into file ~/.stampp
 TODO: configure client in config file
 TODO: configure any status.net instance in config file instead of just being
 glued to identi.ca
+TODO: configure tags to ignore in config file
