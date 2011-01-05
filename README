@@ -25,7 +25,7 @@ online
 TODO: rewrite the script to make use of
 SleekXMPP https://github.com/fritzy/SleekXMPP
 TODO: support additional client — PSI. tips: http://identi.ca/notice/61587942
-TODO: fetch status in a more efficient: http://evan.status.net/notice/447687
+TODO: fetch status in a more efficient way: http://evan.status.net/notice/447687
 
 
 Things to check out:
