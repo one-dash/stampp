@@ -139,9 +139,7 @@ if __name__ == "__main__":
       config.getUsername() + ".xml?count=1"
   connector = Connector(uri)
 
-  xmppClient  = XMPPClient("gajim")
-  status =  xmppClient.getStatus()
-  msg =  xmppClient.getStatusMsg()
+  xmppClient = XMPPClient("gajim")
   xmppStatusMsg = xmppClient.getStatusMsg()
   # TODO: the following check should be configurable
   if xmppClient.getStatus() == "online":
