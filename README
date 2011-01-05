@@ -1,6 +1,6 @@
 Remember identi.ca feature to fetch your Jabber/XMPP status and set it in your
 timeline? That script does the reverse! It sets your Jabber/XMPP status
-according to the profile on identi.ca
+according to the profile on status.net instance(e.g. identi.ca)
 
 You should edit config file ~/.stampp to run this script. For now there should
 be something like
