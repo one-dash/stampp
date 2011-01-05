@@ -95,9 +95,6 @@ class GajimClient:
     set gajim's new status message
     """
     subprocess.call([self.binName, "change_status", self.getStatus(), newMsg])
-    #os.system( +\
-    #    " change_status " +\
-    #    self.getStatus() + " " + newMsg)
 
 class XMPPClient:
   """
