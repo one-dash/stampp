@@ -18,13 +18,27 @@ class Config:
     # TODO: handle absence of config file and/or wrong formatting
     self.cp = ConfigParser.SafeConfigParser()
     self.cp.read(configfilename)
-    self.username = self.cp.get('statusnet', 'username')
+    self.username = self.cp.get('statusnet', 'username').strip()
+    self.uriPrefix = self.cp.get('statusnet', 'uri_prefix').strip()
+    self.uriPostfix = self.cp.get('statusnet', 'uri_postfix').strip()
 
   def getUsername(self):
     """
     data read access method
     """
     return self.username
+
+  def getUriPrefix(self):
+    """
+    returns base URI prefix
+    """
+    return self.uriPrefix
+
+  def getUriPostfix(self):
+    """
+    returns base URI postfix
+    """
+    return self.uriPostfix
 
 class Connector:
   """
@@ -134,8 +148,8 @@ class XMPPClient:
 
 if __name__ == "__main__":
   config = Config(os.path.expanduser("~/.stampp"))
-  uri = "https://identi.ca/api/statuses/user_timeline/" +\
-      config.getUsername() + ".xml?count=1"
+  uri = config.getUriPrefix() +\
+      config.getUsername() + config.getUriPostfix()
   connector = Connector(uri)
 
   xmppClient = XMPPClient("gajim")
