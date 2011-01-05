@@ -144,6 +144,7 @@ if __name__ == "__main__":
   msg =  xmppClient.getStatusMsg()
   snetStatusMsg = extractText(connector.getData())
   xmppStatusMsg = xmppClient.getStatusMsg()
+  # TODO: the following check should be configurable
   if xmppClient.getStatus == "online":
     if snetStatusMsg != xmppStatusMsg:
       # XMPP status changes only if it differs from status.net
