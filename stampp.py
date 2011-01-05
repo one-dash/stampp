@@ -1,6 +1,7 @@
 #!/usr/bin/env python
 
 from xml.dom import minidom
+import ConfigParser
 import os
 import subprocess
 import time
@@ -14,11 +15,10 @@ class Config:
     """
     constructor
     """
-    # TODO: find out what can happen when file does not exist,
-    # TODO: when file is wrong-formatted
-    fd = open(configfilename, "r");
-    self.username = fd.read().strip()
-    fd.close();
+    # TODO: handle absence of config file and/or wrong formatting
+    self.cp = ConfigParser.SafeConfigParser()
+    self.cp.read(configfilename)
+    self.username = self.cp.get('statusnet', 'username')
 
   def getUsername(self):
     """
