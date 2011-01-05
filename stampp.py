@@ -10,9 +10,12 @@ class Config:
     """
     constructor
     """
+    # TODO: find out what can happen when file does not exist,
+    # TODO: when file is wrong-formatted
     fd = open(configfilename, "r");
     self.username = fd.read().strip()
     fd.close();
+
   def getUsername(self):
     """
     data read access method
