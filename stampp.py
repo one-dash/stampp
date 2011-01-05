@@ -1,6 +1,7 @@
 #!/usr/bin/env python
 
 import os
+import urllib2
 
 class Config:
   """
@@ -22,5 +23,30 @@ class Config:
     """
     return self.username
 
+class Connector:
+  """
+  a network connector and retriever class
+
+  the connection is trying to be established and information retrieved upon
+  object creation
+  """
+  def __init__(self, uri):
+    """
+    constructor
+    """
+    self.uri = uri
+
+  def getData(self):
+    """
+    connects with given URI and returns data
+
+    each time it is being called it will reconnect
+    """
+    # TODO: expect things like url cannot be opened
+    return urllib2.urlopen(urllib2.Request(self.uri)).read()
+
 if __name__ == "__main__":
   config = Config(os.path.expanduser("~/.stampp"))
+  uri = "https://identi.ca/api/statuses/user_timeline/" +\
+      config.getUsername() + ".xml?count=1"
+  connector = Connector(uri)
