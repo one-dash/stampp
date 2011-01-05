@@ -89,6 +89,15 @@ class GajimClient:
     # TODO: chech return code, generate exceptions
     return os.popen(self.binName + " get_status_message").read().strip()
 
+  def setStatusMsg(self, newMsg):
+    """
+    set gajim's new status message
+    """
+    subprocess.call([self.binName, "change_status", self.getStatus(), newMsg])
+    #os.system( +\
+    #    " change_status " +\
+    #    self.getStatus() + " " + newMsg)
+
 class XMPPClient:
   """
   XMPP client class
@@ -118,14 +127,19 @@ class XMPPClient:
     """
     return self.clientBackend.getStatusMsg()
 
+  def setStatusMsg(self, newMsg):
+    """
+    set Jabber/XMPP status method
+    """
+    self.clientBackend.setStatusMsg(newMsg)
+
 if __name__ == "__main__":
   config = Config(os.path.expanduser("~/.stampp"))
   uri = "https://identi.ca/api/statuses/user_timeline/" +\
       config.getUsername() + ".xml?count=1"
   connector = Connector(uri)
 
-  extractText(connector.getData())
-
   xmppClient  = XMPPClient("gajim")
   status =  xmppClient.getStatus()
   msg =  xmppClient.getStatusMsg()
+  xmppClient.setStatusMsg(extractText(connector.getData()))
