@@ -2,6 +2,7 @@
 
 from xml.dom import minidom
 import ConfigParser
+import io
 import os
 import subprocess
 import time
@@ -15,13 +16,25 @@ class Config:
     """
     constructor
     """
+    default_settings = """
+[core]
+update_period_sec: 30
+[statusnet]
+username: evan
+uri_prefix: https://identi.ca/api/statuses/user_timeline/
+uri_postfix: .xml?count=1
+"""
     # TODO: handle absence of config file and/or wrong formatting
     self.cp = ConfigParser.SafeConfigParser()
+    self.cp.readfp(io.BytesIO(default_settings))
     self.cp.read(configfilename)
     self.username = self.cp.get('statusnet', 'username').strip()
     self.uriPrefix = self.cp.get('statusnet', 'uri_prefix').strip()
     self.uriPostfix = self.cp.get('statusnet', 'uri_postfix').strip()
     self.updatePeriod = float(self.cp.get('core', 'update_period_sec').strip())
+
+    with open(configfilename, 'wb') as fd:
+      self.cp.write(fd)
 
   def getUsername(self):
     """
