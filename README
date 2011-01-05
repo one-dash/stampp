@@ -16,3 +16,5 @@ glued to identi.ca
 TODO: configure tags to ignore in config file
 TODO: configure whether script should change Jabber/XMPP status if user only
 online
+TODO: rewrite the script to make use of
+SleekXMPP https://github.com/fritzy/SleekXMPP
