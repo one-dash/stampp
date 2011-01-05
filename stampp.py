@@ -142,4 +142,9 @@ if __name__ == "__main__":
   xmppClient  = XMPPClient("gajim")
   status =  xmppClient.getStatus()
   msg =  xmppClient.getStatusMsg()
-  xmppClient.setStatusMsg(extractText(connector.getData()))
+  snetStatusMsg = extractText(connector.getData())
+  xmppStatusMsg = xmppClient.getStatusMsg()
+  if snetStatusMsg != xmppStatusMsg:
+    xmppClient.setStatusMsg(snetStatusMsg)
+  else:
+    pass
