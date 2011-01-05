@@ -4,7 +4,7 @@ import os
 
 class Config:
   """
-  configuration container class
+  configuration container and access class
   """
   def __init__(self, configfilename):
     """
