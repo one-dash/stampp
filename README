@@ -2,7 +2,7 @@ Remember identi.ca feature to fetch your Jabber/XMPP status and set it in your
 timeline? That script does the reverse! It sets your Jabber/XMPP status
 according to the profile on identi.ca
 
-You _must_ have a config file ~/.stampp to run this script. For now there should
+You should edit config file ~/.stampp to run this script. For now there should
 be something like
 -------------------------------------8<-----------------------------------------
 [core]
@@ -15,6 +15,7 @@ username: your_user_name_on_identica
 uri_prefix: https://identi.ca/api/statuses/user_timeline/
 uri_postfix: .xml?count=1 # normally you should not touch this
 -------------------------------------8<-----------------------------------------
+the script automatically writes the config on startup
 
 
 TODO: configure client in config file
@@ -23,6 +24,7 @@ TODO: configure whether script should change Jabber/XMPP status if user only
 online
 TODO: rewrite the script to make use of
 SleekXMPP https://github.com/fritzy/SleekXMPP
+TODO: support additional client — PSI. tips: http://identi.ca/notice/61587942
 
 
 Things to check out:
