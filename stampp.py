@@ -3,6 +3,7 @@
 from xml.dom import minidom
 import os
 import subprocess
+import time
 import urllib2
 
 class Config:
@@ -140,14 +141,18 @@ if __name__ == "__main__":
   connector = Connector(uri)
 
   xmppClient = XMPPClient("gajim")
-  xmppStatusMsg = xmppClient.getStatusMsg()
-  # TODO: the following check should be configurable
-  if xmppClient.getStatus() == "online":
-    snetStatusMsg = extractText(connector.getData())
-    if snetStatusMsg != xmppStatusMsg:
-      # XMPP status changes only if it differs from status.net
-      xmppClient.setStatusMsg(snetStatusMsg)
+
+  while True:
+    xmppStatusMsg = xmppClient.getStatusMsg()
+    # TODO: the following check should be configurable
+    if xmppClient.getStatus() == "online":
+      snetStatusMsg = extractText(connector.getData())
+      if snetStatusMsg != xmppStatusMsg:
+        # XMPP status changes only if it differs from status.net
+        xmppClient.setStatusMsg(snetStatusMsg)
+      else:
+        pass
     else:
       pass
-  else:
-    pass
+    # TODO: make sleep time configurable
+    time.sleep(30)
