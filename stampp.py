@@ -79,12 +79,14 @@ class GajimClient:
     """
     return gajim status
     """
+    # TODO: chech return code, generate exceptions
     return os.popen(self.binName + " get_status").read().strip()
 
   def getStatusMsg(self):
     """
     return gajim status message
     """
+    # TODO: chech return code, generate exceptions
     return os.popen(self.binName + " get_status_message").read().strip()
 
 class XMPPClient:
