@@ -21,6 +21,7 @@ class Config:
     self.username = self.cp.get('statusnet', 'username').strip()
     self.uriPrefix = self.cp.get('statusnet', 'uri_prefix').strip()
     self.uriPostfix = self.cp.get('statusnet', 'uri_postfix').strip()
+    self.updatePeriod = float(self.cp.get('core', 'update_period_sec').strip())
 
   def getUsername(self):
     """
@@ -39,6 +40,12 @@ class Config:
     returns base URI postfix
     """
     return self.uriPostfix
+
+  def getUpdatePeriod(self):
+    """
+    returns update period in seconds
+    """
+    return self.updatePeriod
 
 class Connector:
   """
@@ -166,5 +173,4 @@ if __name__ == "__main__":
         pass
     else:
       pass
-    # TODO: make sleep time configurable
-    time.sleep(30)
+    time.sleep(config.getUpdatePeriod())
