@@ -5,6 +5,9 @@ according to the profile on identi.ca
 You _must_ have a config file ~/.stampp to run this script. For now there should
 be something like
 -------------------------------------8<-----------------------------------------
+[core]
+# time between checks in seconds
+update_period_sec: 30
 [statusnet]
 username: your_user_name_on_identica
 # with the following you can configure any status.net instance to use w/ this
