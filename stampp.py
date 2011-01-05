@@ -142,10 +142,10 @@ if __name__ == "__main__":
   xmppClient  = XMPPClient("gajim")
   status =  xmppClient.getStatus()
   msg =  xmppClient.getStatusMsg()
-  snetStatusMsg = extractText(connector.getData())
   xmppStatusMsg = xmppClient.getStatusMsg()
   # TODO: the following check should be configurable
   if xmppClient.getStatus() == "online":
+    snetStatusMsg = extractText(connector.getData())
     if snetStatusMsg != xmppStatusMsg:
       # XMPP status changes only if it differs from status.net
       xmppClient.setStatusMsg(snetStatusMsg)
