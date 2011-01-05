@@ -2,6 +2,7 @@
 
 from xml.dom import minidom
 import os
+import subprocess
 import urllib2
 
 class Config:
@@ -63,6 +64,58 @@ def extractText(source):
 
   return text
 
+class GajimClient:
+  """
+  class for a gajim type client
+  """
+  def __init__(self):
+    """
+    constructor
+    """
+    # TODO: chech if such client really exists
+    self.binName = "gajim-remote"
+
+  def getStatus(self):
+    """
+    return gajim status
+    """
+    return os.popen(self.binName + " get_status").read().strip()
+
+  def getStatusMsg(self):
+    """
+    return gajim status message
+    """
+    return os.popen(self.binName + " get_status_message").read().strip()
+
+class XMPPClient:
+  """
+  XMPP client class
+  """
+  def __init__(self, clientType):
+    """
+    constructor
+
+    client type is a string determining type of a client w/ a name
+    """
+
+    if clientType == "gajim":
+      self.clientBackend = GajimClient()
+    else:
+      pass
+      # TODO: write other clients backends!
+
+  def getStatus(self):
+    """
+    returns client status
+    """
+    return self.clientBackend.getStatus()
+
+  def getStatusMsg(self):
+    """
+    return client status message
+    """
+    return self.clientBackend.getStatusMsg()
+
 if __name__ == "__main__":
   config = Config(os.path.expanduser("~/.stampp"))
   uri = "https://identi.ca/api/statuses/user_timeline/" +\
@@ -70,3 +123,7 @@ if __name__ == "__main__":
   connector = Connector(uri)
 
   extractText(connector.getData())
+
+  xmppClient  = XMPPClient("gajim")
+  status =  xmppClient.getStatus()
+  msg =  xmppClient.getStatusMsg()
