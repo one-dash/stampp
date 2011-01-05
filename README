@@ -7,6 +7,10 @@ be something like
 -------------------------------------8<-----------------------------------------
 [statusnet]
 username: your_user_name_on_identica
+# with the following you can configure any status.net instance to use w/ this
+# script
+uri_prefix: https://identi.ca/api/statuses/user_timeline/
+uri_postfix: .xml?count=1 # normally you should not touch this
 -------------------------------------8<-----------------------------------------
 
 
