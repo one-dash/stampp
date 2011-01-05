@@ -3,3 +3,8 @@ timeline? That script does the reverse! It sets your Jabber/XMPP status
 according to the profile on identi.ca
 
 For now, enter the use name you want to fetch statuses from into file ~/.stampp
+
+
+TODO: configure client in config file
+TODO: configure any status.net instance in config file instead of just being
+glued to identi.ca
