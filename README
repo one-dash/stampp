@@ -15,7 +15,7 @@ username: your_user_name_on_identica
 uri_prefix: https://identi.ca/api/statuses/user_timeline/
 uri_postfix: .xml?count=1 # normally you should not touch this
 -------------------------------------8<-----------------------------------------
-the script automatically writes the config on startup
+the script automatically writes the config with default options on startup
 
 
 TODO: configure tags to ignore in config file
