@@ -8,12 +8,20 @@ be something like
 [core]
 # time between checks in seconds
 update_period_sec: 30
+# whether to respect user manually setting XMPP status message or not
+respect_xmpp_status: true
+
 [statusnet]
 username: your_user_name_on_identica
 # with the following you can configure any status.net instance to use w/ this
 # script
 uri_prefix: https://identi.ca/api/statuses/user_timeline/
 uri_postfix: .xml?count=1 # normally you should not touch this
+
+[xmpp]
+# allow the script change user status if he's online or with any status. if set
+# to true, it will change XMPP status only if it set to 'online'
+change_status_if_online: true
 -------------------------------------8<-----------------------------------------
 the script automatically writes the config with default options on startup
 
