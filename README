@@ -18,7 +18,6 @@ uri_postfix: .xml?count=1 # normally you should not touch this
 the script automatically writes the config on startup
 
 
-TODO: configure client in config file
 TODO: configure tags to ignore in config file
 TODO: configure whether script should change Jabber/XMPP status if user only
 online
