@@ -23,6 +23,8 @@ update_period_sec: 30
 username: evan
 uri_prefix: https://identi.ca/api/statuses/user_timeline/
 uri_postfix: .xml?count=1
+[xmpp]
+change_status_if_online: true
 """
     # TODO: handle absence of config file and/or wrong formatting
     self.cp = ConfigParser.SafeConfigParser()
@@ -32,6 +34,11 @@ uri_postfix: .xml?count=1
     self.uriPrefix = self.cp.get('statusnet', 'uri_prefix').strip()
     self.uriPostfix = self.cp.get('statusnet', 'uri_postfix').strip()
     self.updatePeriod = float(self.cp.get('core', 'update_period_sec').strip())
+
+    if self.cp.get('xmpp', 'change_status_if_online') == "true":
+      self.ifOnline = True
+    else:
+      self.ifOnline = False
 
     with open(configfilename, 'wb') as fd:
       self.cp.write(fd)
@@ -59,6 +66,13 @@ uri_postfix: .xml?count=1
     returns update period in seconds
     """
     return self.updatePeriod
+
+  def getChangeIfOnline(self):
+    """
+    returns true if status should be changed only if XMPP status is set to
+    'online'
+    """
+    return self.ifOnline
 
 class Connector:
   """
@@ -189,8 +203,10 @@ if __name__ == "__main__":
 
   while True:
     xmppStatusMsg = xmppClient.getStatusMsg()
-    # TODO: the following check should be configurable
-    if xmppClient.getStatus() == "online":
+
+    if ((config.getChangeIfOnline() == True) and\
+        (xmppClient.getStatus() == "online")) or\
+        (config.getChangeIfOnline() == False):
       snetStatusMsg = snetClient.getLastStatus()
       if snetStatusMsg != xmppStatusMsg:
         # XMPP status changes only if it differs from status.net
