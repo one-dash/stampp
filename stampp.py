@@ -82,22 +82,35 @@ class Connector:
     # TODO: expect things like url cannot be opened
     return urllib2.urlopen(urllib2.Request(self.uri)).read()
 
-def extractText(source):
+class StatusnetClient:
   """
-  returns status text from status.net XML response
-
-  source should be well-formed XML status.net response
+  status.net instance client class
   """
-  # TODO: handle parse errors
-  wholexml = minidom.parseString(source)
-  # TODO: handle absense of XML tags
-  statuses = wholexml.getElementsByTagName('statuses')[0]
-  # TODO: handle absense of any text entries in user's microblog
-  laststatus = statuses.getElementsByTagName('status')[0]
-  textelemnt = laststatus.getElementsByTagName('text')[0]
-  text = textelemnt.firstChild.data
+  def __init__(self, uri):
+    """
+    class constructor
 
-  return text
+    uri should be a URI to user's timeline in API XML, e.g.
+    https://identi.ca/api/statuses/user_timeline/evan
+
+    """
+    self.connector = Connector(uri)
+
+  def getLastStatus(self):
+    """
+    returns last status from user's timeline
+    """
+
+    # TODO: handle parse errors
+    wholexml = minidom.parseString(self.connector.getData())
+    # TODO: handle absense of XML tags
+    statuses = wholexml.getElementsByTagName('statuses')[0]
+    # TODO: handle absense of any text entries in user's microblog
+    laststatus = statuses.getElementsByTagName('status')[0]
+    textelemnt = laststatus.getElementsByTagName('text')[0]
+    text = textelemnt.firstChild.data
+
+    return text
 
 class GajimClient:
   """
@@ -170,7 +183,7 @@ if __name__ == "__main__":
   config = Config(os.path.expanduser("~/.stampp"))
   uri = config.getUriPrefix() +\
       config.getUsername() + config.getUriPostfix()
-  connector = Connector(uri)
+  snetClient = StatusnetClient(uri)
 
   xmppClient = XMPPClient("gajim")
 
@@ -178,7 +191,7 @@ if __name__ == "__main__":
     xmppStatusMsg = xmppClient.getStatusMsg()
     # TODO: the following check should be configurable
     if xmppClient.getStatus() == "online":
-      snetStatusMsg = extractText(connector.getData())
+      snetStatusMsg = snetClient.getLastStatus()
       if snetStatusMsg != xmppStatusMsg:
         # XMPP status changes only if it differs from status.net
         xmppClient.setStatusMsg(snetStatusMsg)
