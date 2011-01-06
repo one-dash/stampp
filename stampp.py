@@ -19,10 +19,13 @@ class Config:
     default_settings = """
 [core]
 update_period_sec: 30
+respect_xmpp_status: true
+
 [statusnet]
 username: evan
 uri_prefix: https://identi.ca/api/statuses/user_timeline/
 uri_postfix: .xml?count=1
+
 [xmpp]
 change_status_if_online: true
 """
@@ -40,6 +43,13 @@ change_status_if_online: true
     else:
       self.ifOnline = False
 
+    # see self.getXmppStatusRespect() description
+    if self.cp.get('core', 'respect_xmpp_status').strip() == "true":
+      self.respectXmpp = True
+    else:
+      self.respectXmpp = False
+
+    # write config
     with open(configfilename, 'wb') as fd:
       self.cp.write(fd)
 
@@ -73,6 +83,14 @@ change_status_if_online: true
     'online'
     """
     return self.ifOnline
+
+  def getXmppStatusRespect(self):
+    """
+    returns False if XMPP status set by user should should be overriden
+    returns True if XMPP status set by user should not be overriden unless there
+    is a newer status from statusnet
+    """
+    return self.respectXmpp
 
 class Connector:
   """
@@ -193,6 +211,16 @@ class XMPPClient:
     """
     self.clientBackend.setStatusMsg(newMsg)
 
+def changeXmppStatus(statusnetStatus, xmppStatusMsg, xmppClient):
+  """
+  as it says, it changes XMPP client status
+  """
+  if snetStatusMsg != xmppStatusMsg:
+    # XMPP status changes only if it differs from status.net
+    xmppClient.setStatusMsg(snetStatusMsg)
+  else:
+    pass
+
 if __name__ == "__main__":
   config = Config(os.path.expanduser("~/.stampp"))
   uri = config.getUriPrefix() +\
@@ -201,18 +229,46 @@ if __name__ == "__main__":
 
   xmppClient = XMPPClient("gajim")
 
+  # previous status.net status message is stored here
+  prevSnetMsg = snetClient.getLastStatus()
+  # previous XMPP status message is stored here
+  prevXmppMsg = xmppClient.getStatusMsg()
   while True:
     xmppStatusMsg = xmppClient.getStatusMsg()
 
+    # XMPP status changes if user is online or by setting from config
     if ((config.getChangeIfOnline() == True) and\
         (xmppClient.getStatus() == "online")) or\
         (config.getChangeIfOnline() == False):
       snetStatusMsg = snetClient.getLastStatus()
-      if snetStatusMsg != xmppStatusMsg:
-        # XMPP status changes only if it differs from status.net
-        xmppClient.setStatusMsg(snetStatusMsg)
+      if snetStatusMsg == prevSnetMsg:
+        if config.getXmppStatusRespect() == False:
+          changeXmppStatus(snetStatusMsg, xmppStatusMsg, xmppClient)
+        else:
+          pass
+        # if status.net status message has not changed, do nothing
       else:
-        pass
+        # status.net status message has changed
+        prevSnetMsg = snetStatusMsg
+
+        if xmppStatusMsg == prevXmppMsg:
+          # if XMPP status has not changed by the user, it does not affect
+          # anything
+          changeXmppStatus(snetStatusMsg, xmppStatusMsg, xmppClient)
+          xmppStatusMsg = xmppClient.getStatusMsg()
+          prevXmppMsg = xmppStatusMsg
+        else:
+          # assume that XMPP status message has changed by the user
+          prevXmppMsg = xmppStatusMsg
+          if config.getXmppStatusRespect() == True:
+            # respect user XMPP status message, thus not changing it
+            pass
+          else:
+            # don't respect user changing XMPP status message, change it to
+            # coinside w/ status.net
+            changeXmppStatus(snetStatusMsg, xmppStatusMsg, xmppClient)
+            xmppStatusMsg = xmppClient.getStatusMsg()
+            prevXmppMsg = xmppStatusMsg
     else:
       pass
     time.sleep(config.getUpdatePeriod())
